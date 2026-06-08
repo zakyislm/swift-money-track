@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class NeoButton extends StatefulWidget {
   final Widget child;
   final VoidCallback onTap;
-  final String variant; // 'yellow' | 'green' | 'pink' | 'white' | 'dark' | 'gray'
+  final String variant;
   final Color? backgroundColor;
   final double borderWidth;
   final double shadowOffset;

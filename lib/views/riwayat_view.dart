@@ -20,7 +20,7 @@ class RiwayatView extends StatefulWidget {
 
 class _RiwayatViewState extends State<RiwayatView> {
   final _searchController = TextEditingController();
-  String _activeTab = 'semua'; // 'semua' | 'pemasukan' | 'pengeluaran'
+  String _activeTab = 'semua';
   String _searchQuery = '';
 
   @override
@@ -33,18 +33,15 @@ class _RiwayatViewState extends State<RiwayatView> {
     return val.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.');
   }
 
-  // Group transactions by date
   Map<String, List<Transaction>> getGroupedTransactions(List<Transaction> filteredList) {
     final Map<String, List<Transaction>> groups = {};
     for (var tx in filteredList) {
       String key = tx.date;
-      // Synthesize elegant group text
       if (tx.date == '2026-06-08') {
         key = 'HARI INI';
       } else if (tx.date == '2026-06-07') {
         key = 'KEMARIN';
       } else {
-        // format ISO date roughly
         final parts = tx.date.split('-');
         if (parts.length == 3) {
           final year = parts[0];
@@ -67,7 +64,6 @@ class _RiwayatViewState extends State<RiwayatView> {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Filter elements
     final filteredTransactions = widget.transactions.where((tx) {
       final matchesSearch = tx.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           tx.category.toLowerCase().contains(_searchQuery.toLowerCase()) ||
@@ -78,7 +74,6 @@ class _RiwayatViewState extends State<RiwayatView> {
       return matchesSearch && matchesTab;
     }).toList();
 
-    // 2. Statistics calculation
     double filteredIncome = 0;
     double filteredExpense = 0;
     for (var tx in filteredTransactions) {
@@ -90,7 +85,6 @@ class _RiwayatViewState extends State<RiwayatView> {
     }
     final filteredNet = filteredIncome - filteredExpense;
 
-    // 3. Grouping
     final groupedMap = getGroupedTransactions(filteredTransactions);
 
     return SingleChildScrollView(
@@ -98,7 +92,6 @@ class _RiwayatViewState extends State<RiwayatView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Header Bar
           const Row(
             children: [
               Icon(LucideIcons.dollarSign, color: Color(0xFFFFE600), size: 24),
@@ -118,7 +111,6 @@ class _RiwayatViewState extends State<RiwayatView> {
           ),
           const SizedBox(height: 16),
 
-          // Search Input
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -148,7 +140,6 @@ class _RiwayatViewState extends State<RiwayatView> {
           ),
           const SizedBox(height: 16),
 
-          // Custom Segmented Tabs Selector (Semua / Masuk / Keluar)
           Row(
             children: [
               Expanded(
@@ -226,7 +217,6 @@ class _RiwayatViewState extends State<RiwayatView> {
           ),
           const SizedBox(height: 24),
 
-          // Main Screen layout: Grouped list + Side statistical container
           if (groupedMap.isEmpty)
             Container(
               padding: const EdgeInsets.symmetric(vertical: 48),
@@ -248,7 +238,6 @@ class _RiwayatViewState extends State<RiwayatView> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Date label block indicator
                     Container(
                       margin: const EdgeInsets.only(top: 14, bottom: 10),
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
@@ -267,7 +256,6 @@ class _RiwayatViewState extends State<RiwayatView> {
                       ),
                     ),
 
-                    // Inner Group Cards List
                     ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
@@ -283,7 +271,6 @@ class _RiwayatViewState extends State<RiwayatView> {
                             padding: const EdgeInsets.all(12),
                             child: Row(
                               children: [
-                                // Category block code
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                   decoration: BoxDecoration(
@@ -297,7 +284,6 @@ class _RiwayatViewState extends State<RiwayatView> {
                                 ),
                                 const SizedBox(width: 12),
 
-                                // Main Text fields
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,7 +301,6 @@ class _RiwayatViewState extends State<RiwayatView> {
                                   ),
                                 ),
 
-                                // Values & Delete Actions
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
@@ -373,7 +358,6 @@ class _RiwayatViewState extends State<RiwayatView> {
 
           const SizedBox(height: 24),
 
-          // FILTER DIAGNOSIS CARD
           const Text(
             'Filter',
             style: TextStyle(
@@ -408,7 +392,6 @@ class _RiwayatViewState extends State<RiwayatView> {
                 ),
                 const SizedBox(height: 15),
 
-                // Table Info
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -453,7 +436,6 @@ class _RiwayatViewState extends State<RiwayatView> {
           ),
           const SizedBox(height: 14),
 
-          // QUICK INSIGHT CARD
           NeoCard(
             variant: 'dark',
             padding: const EdgeInsets.all(16),

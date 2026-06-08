@@ -31,9 +31,9 @@ class KeuangankuApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
-        scaffoldBackgroundColor: const Color(0xFF121415), // Deep Carbon Dark Canvas
+        scaffoldBackgroundColor: const Color(0xFF121415),
         fontFamily: 'sans-serif',
-        primaryColor: const Color(0xFFFFE600), // Neobrutalist primary yellow
+        primaryColor: const Color(0xFFFFE600),
       ),
       home: const MainLayoutScreen(),
     );
@@ -48,12 +48,11 @@ class MainLayoutScreen extends StatefulWidget {
 }
 
 class _MainLayoutScreenState extends State<MainLayoutScreen> {
-  // State lists
   List<Transaction> _transactions = [];
   List<NotificationItem> _notifications = [];
   List<MonthlySummary> _monthlySummaries = [];
 
-  String _currentTab = 'beranda'; // 'beranda' | 'ikhtisar' | 'riwayat'
+  String _currentTab = 'beranda';
   bool _isNotifDrawerOpen = false;
   String _currentTimeString = '';
   late Timer _clockTimer;
@@ -71,7 +70,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     super.dispose();
   }
 
-  // 1. Clock timer
   void _startClockTicks() {
     _clockTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       final now = DateTime.now();
@@ -84,11 +82,9 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     });
   }
 
-  // 2. Storage persistence (JSON converters)
   Future<void> _loadStateFromLocalStorage() async {
     final prefs = await SharedPreferences.getInstance();
     
-    // Load Transactions
     final txString = prefs.getString('keuanganku_transactions');
     if (txString != null) {
       final List decoded = json.decode(txString);
@@ -97,7 +93,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
       _transactions = List.from(initialTransactions);
     }
 
-    // Load Notifications
     final notifString = prefs.getString('keuanganku_notifications');
     if (notifString != null) {
       final List decoded = json.decode(notifString);
@@ -106,7 +101,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
       _notifications = List.from(initialNotifications);
     }
 
-    // Load Monthly Summaries
     final summaryString = prefs.getString('keuanganku_monthly_summaries');
     if (summaryString != null) {
       final List decoded = json.decode(summaryString);
@@ -115,7 +109,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
       _monthlySummaries = List.from(initialMonthlySummaries);
     }
 
-    // Re-verify balances or update active summary
     _recalculateCurrentMonthSummaries();
     setState(() {});
   }
@@ -138,15 +131,12 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     await prefs.setString('keuanganku_monthly_summaries', json.encode(data));
   }
 
-  // 3. Transactions mutating events
   void _addTransaction(Transaction tx) {
     setState(() {
-      _transactions.insert(0, tx); // insert at the top
+      _transactions.insert(0, tx);
     });
     _saveTransactionsToStorage();
     _recalculateCurrentMonthSummaries();
-    
-    // Trigger notification
     _triggerNotification(
       'New Transactions Added!',
       '${tx.type.toUpperCase()}: ${tx.title} Rp ${tx.amount.toInt()} added successfully.',
@@ -167,7 +157,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     );
   }
 
-  // 4. Notifications actions
   void _triggerNotification(String title, String message) {
     final formatTime = DateFormat('HH:mm').format(DateTime.now());
     final formatDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -203,9 +192,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     _saveNotificationsToStorage();
   }
 
-  // 5. Month estimation mechanics
   void _recalculateCurrentMonthSummaries() {
-    // Collect active calculations for June (index 5) or matching periods
     double juneIncome = 0;
     double juneExpense = 0;
     
@@ -220,7 +207,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     }
 
     setState(() {
-      // Find June index and mutate dynamically
       final idx = _monthlySummaries.indexWhere((sum) => sum.monthIndex == 5);
       if (idx != -1) {
         final prevJune = _monthlySummaries[idx];
@@ -238,7 +224,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   }
 
   void _estimateMonth(int monthIndex) {
-    // Standard estimation algorithm: extrapolating average from active periods
     double totalActiveIn = 0;
     double totalActiveOut = 0;
     int count = 0;
@@ -258,7 +243,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     }
 
     final estIn = totalActiveIn / count;
-    final estOut = (totalActiveOut / count) * 1.05; // estimate slightly higher inflation outflow
+    final estOut = (totalActiveOut / count) * 1.05;
 
     setState(() {
       final idx = _monthlySummaries.indexWhere((sum) => sum.monthIndex == monthIndex);
@@ -269,7 +254,7 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
           monthName: target.monthName,
           income: estIn,
           expense: estOut,
-          growth: 4, // positive growth expectation index
+          growth: 4,
           status: 'estimated',
         );
       }
@@ -282,7 +267,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     );
   }
 
-  // Dialog triggers
   void _openAddTransactionFlow() {
     showDialog(
       context: context,
@@ -297,7 +281,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
     final unreadNotifs = _notifications.where((n) => !n.isRead).length;
     final hasUnread = unreadNotifs > 0;
 
-    // View selector
     Widget activeBody;
     switch (_currentTab) {
       case 'ikhtisar':
@@ -334,7 +317,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
           children: [
             Row(
               children: [
-                // Side Navigation Panel (Only on desktop displays)
                 if (isDesktop)
                   Container(
                     width: 250,
@@ -348,7 +330,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // App Brand Title
                         const Text(
                           'Swift',
                           style: TextStyle(
@@ -373,7 +354,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
                         ),
                         const SizedBox(height: 35),
 
-                        // Tab Options
                         NeoButton(
                           variant: _currentTab == 'beranda' ? 'yellow' : 'dark',
                           onTap: () => setState(() => _currentTab = 'beranda'),
@@ -414,7 +394,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
                         ),
                         const Spacer(),
 
-                        // System indicators
                         NeoCard(
                           variant: 'dark',
                           padding: const EdgeInsets.all(12),
@@ -434,12 +413,10 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
                     ),
                   ),
 
-                // Main Central Router Body
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // Top universal clock bar ticker
                       Container(
                         color: Colors.black,
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -475,7 +452,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
               ],
             ),
 
-            // Notification Overlay Drawer Sidebar panel sliding on the right
             if (_isNotifDrawerOpen)
               Positioned(
                 right: 0,
@@ -492,7 +468,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
         ),
       ),
 
-      // Integrated central quick FLOATING ACTION ADD TRANSACTION Trigger (Visible on all views)
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color(0xFFFFE600),
         foregroundColor: Colors.black,
@@ -502,7 +477,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
         child: const Icon(LucideIcons.plus, size: 28),
       ),
 
-      // High contrast sticky Bottom Navigation panel for mobile screens
       bottomNavigationBar: isDesktop
           ? null
           : Container(
@@ -560,7 +534,6 @@ class _MainLayoutScreenState extends State<MainLayoutScreen> {
   }
 }
 
-// Side Sliding Notification Alert component drawer
 class ScreenNotificationDrawer extends StatelessWidget {
   final List<NotificationItem> notifications;
   final VoidCallback onClose;

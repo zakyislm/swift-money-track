@@ -84,7 +84,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Stats
               NeoCard(
                 variant: isProfit ? 'green' : 'pink',
                 padding: const EdgeInsets.all(12),
@@ -115,7 +114,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
               ),
               const SizedBox(height: 16),
 
-              // Summary values
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -170,11 +168,9 @@ class _IkhtisarViewState extends State<IkhtisarView> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine Top 5 Transactions by raw amount
     final sortedTxs = [...widget.transactions]..sort((a, b) => b.amount.compareTo(a.amount));
     final top5Txs = sortedTxs.take(5).toList();
 
-    // Split blended summaries by visibility toggle
     final visibleSummaries = _showAllMonths 
         ? widget.monthlySummaries 
         : widget.monthlySummaries.take(8).toList();
@@ -184,7 +180,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Banner Title Row
           const Row(
             children: [
               Text(
@@ -250,7 +245,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
           ),
           const SizedBox(height: 24),
 
-          // Flow Grid Title
           const Text(
             'Monthly Cashflow',
             style: TextStyle(
@@ -263,7 +257,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
           ),
           const SizedBox(height: 12),
 
-          // Monthly Flow Grid
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -371,7 +364,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
           ),
           const SizedBox(height: 16),
 
-          // Visibility Toggler Button
           NeoButton(
             variant: 'dark',
             onTap: () => setState(() => _showAllMonths = !_showAllMonths),
@@ -390,7 +382,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
           ),
           const SizedBox(height: 30),
 
-          // TOP 5 TRANSAKSI
           const Text(
             'Top 5 Biggest Transactions',
             style: TextStyle(
@@ -475,7 +466,6 @@ class _IkhtisarViewState extends State<IkhtisarView> {
 
           const SizedBox(height: 30),
 
-          // Call to Action Box
           NeoCard(
             variant: 'bright',
             padding: const EdgeInsets.all(20),

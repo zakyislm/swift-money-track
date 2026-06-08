@@ -20,7 +20,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   final _amountController = TextEditingController();
   final _noteController = TextEditingController();
   
-  String _type = 'pengeluaran'; // 'pemasukan' or 'pengeluaran'
+  String _type = 'pengeluaran';
   String _category = 'Food';
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -98,7 +98,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 15),
 
-                // TYPE SELECTOR: Pemasukan / Pengeluaran
                 Row(
                   children: [
                     Expanded(
@@ -150,7 +149,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 20),
 
-                // TITLE FIELD
                 const Text(
                   'Name Value',
                   style: TextStyle(
@@ -191,7 +189,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 16),
 
-                // AMOUNT FIELD
                 const Text(
                   'Amount (Rp)',
                   style: TextStyle(
@@ -237,7 +234,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 16),
 
-                // CATEGORY PICKS
                 const Text(
                   'Choose Category',
                   style: TextStyle(
@@ -252,7 +248,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                   spacing: 8,
                   runSpacing: 8,
                   children: filteredCats.map((cat) {
-                    // Check logic to balance categories ('Pendapatan', 'Investasi' only for Pemasukan)
                     final isIncomeCategory = cat.name == 'Income' || cat.name == 'Investation';
                     if (_type == 'pemasukan' && !isIncomeCategory) return const SizedBox.shrink();
                     if (_type == 'pengeluaran' && isIncomeCategory) return const SizedBox.shrink();
@@ -282,7 +277,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 16),
 
-                // DATE & TIME PICKERS ROW
                 Row(
                   children: [
                     Expanded(
@@ -368,7 +362,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 16),
 
-                // NOTE/MEMO FIELD
                 const Text(
                   'Notes (Optional)',
                   style: TextStyle(
@@ -400,7 +393,6 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
                 ),
                 const SizedBox(height: 25),
 
-                // ACTIONS BUTTON
                 NeoButton(
                   variant: 'yellow',
                   onTap: _submitData,

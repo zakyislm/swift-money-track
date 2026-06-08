@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class NeoCard extends StatelessWidget {
   final Widget child;
   final Color? backgroundColor;
-  final String variant; // 'yellow' | 'green' | 'pink' | 'surface' | 'bright' | 'white' | 'dark'
+  final String variant;
   final double borderWidth;
   final double shadowOffset;
   final Color shadowColor;
@@ -26,11 +26,11 @@ class NeoCard extends StatelessWidget {
     if (backgroundColor != null) return backgroundColor!;
     switch (variant) {
       case 'yellow':
-        return const Color(0xFFFFE600); // Standard Neobrutalist Yellow (ARGB: 0xFFFFE600 is hex #FFE600)
+        return const Color(0xFFFFE600);
       case 'green':
-        return const Color(0xFF2DE17F); // Neobrutalist Neon Green
+        return const Color(0xFF2DE17F);
       case 'pink':
-        return const Color(0xFFFF2E93); // Neobrutalist Neon Pink
+        return const Color(0xFFFF2E93);
       case 'bright':
         return const Color(0xFFFFE600);
       case 'white':
@@ -39,7 +39,7 @@ class NeoCard extends StatelessWidget {
         return const Color(0xFF1E2122);
       case 'surface':
       default:
-        return const Color(0xFF1C1E1F); // Slate Black Surface Card
+        return const Color(0xFF1C1E1F);
     }
   }
 

@@ -2,10 +2,10 @@ class Transaction {
   final String id;
   final String title;
   final double amount;
-  final String type; // 'pemasukan' or 'pengeluaran'
+  final String type;
   final String category;
-  final String date; // format: 'YYYY-MM-DD'
-  final String time; // format: 'HH:MM'
+  final String date;
+  final String time;
   final String note;
 
   Transaction({

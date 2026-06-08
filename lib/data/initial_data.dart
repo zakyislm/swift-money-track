@@ -3,8 +3,8 @@ import '../models/notification_item.dart';
 
 class CategoryItem {
   final String name;
-  final String icon; // Icon description to map to Lucide icons
-  final String color; // 'pink' or 'green' or 'yellow'
+  final String icon;
+  final String color;
 
   CategoryItem({
     required this.name,
@@ -19,7 +19,7 @@ class MonthlySummary {
   final double income;
   final double expense;
   final int growth;
-  final String status; // 'active' | 'estimated' | 'pending'
+  final String status;
 
   MonthlySummary({
     required this.monthIndex,

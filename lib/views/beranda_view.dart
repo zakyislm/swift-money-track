@@ -30,7 +30,6 @@ class BerandaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1. Calculate Metrics
     double totalIncome = 0;
     double totalExpense = 0;
     for (var tx in transactions) {
@@ -42,7 +41,6 @@ class BerandaView extends StatelessWidget {
     }
     double totalBalance = totalIncome - totalExpense;
 
-    // 2. Extract Latest 4 Transactions
     final latestTransactions = transactions.take(4).toList();
 
     return SingleChildScrollView(
@@ -50,7 +48,6 @@ class BerandaView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Top Header Row (visible on mobile/tablet)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -94,7 +91,6 @@ class BerandaView extends StatelessWidget {
           ),
           const SizedBox(height: 20),
 
-          // Core Metric Cards Grid
           NeoCard(
             variant: 'yellow',
             padding: const EdgeInsets.all(18.0),
@@ -221,7 +217,6 @@ class BerandaView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Trend Chart Section
           const Text(
             'Financial Overview (last 6m)',
             style: TextStyle(
@@ -298,7 +293,6 @@ class BerandaView extends StatelessWidget {
                   minY: 0,
                   maxY: 10000000,
                   lineBarsData: [
-                    // Income line (Neon Green)
                     LineChartBarData(
                       spots: const [
                         FlSpot(0, 8500000),
@@ -314,7 +308,6 @@ class BerandaView extends StatelessWidget {
                       isStrokeCapRound: true,
                       dotData: const FlDotData(show: true),
                     ),
-                    // Expense line (Neon Pink)
                     LineChartBarData(
                       spots: const [
                         FlSpot(0, 4200000),
@@ -337,7 +330,6 @@ class BerandaView extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Recent Activities
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -370,7 +362,7 @@ class BerandaView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 36),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade700, width: 2, style: BorderStyle.none), // dashed can be simulated
+                border: Border.all(color: Colors.grey.shade700, width: 2, style: BorderStyle.none),
               ),
               child: const Text(
                 'No Transaction Found',
@@ -392,7 +384,6 @@ class BerandaView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   child: Row(
                     children: [
-                      // Category prefix block
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                         decoration: BoxDecoration(
@@ -410,7 +401,6 @@ class BerandaView extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
 
-                      // Title & Date info
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -438,7 +428,6 @@ class BerandaView extends StatelessWidget {
                         ),
                       ),
 
-                      // Nominal quantity
                       Text(
                         '${isIncome ? "+" : "-"}Rp ${tx.amount.toInt().toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]}.')}',
                         style: TextStyle(
